@@ -17,3 +17,19 @@ document.querySelectorAll('.num').forEach((element) => {
     
   });
 });
+
+
+
+document.querySelector('.delete').addEventListener('click', () => {
+  let displayValue = document.querySelector('.display').textContent;
+  if(displayValue.length === 1){
+    document.querySelector('.display').textContent = 0;
+  }
+  else{
+    displayValue = displayValue.substring(0,displayValue.length-1);
+    console.log(displayValue);
+    document.querySelector('.display').textContent = displayValue;
+  
+  }
+  
+});
