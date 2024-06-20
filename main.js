@@ -10,7 +10,7 @@ document.querySelectorAll('.num').forEach((element) => {
   element.addEventListener('click', () => {
     let displayValue = document.querySelector('.display').textContent;
     if(displayValue.length <16){
-      if(displayValue !== '0'){
+      if(displayValue !== '0' && num1 !== ''){
         document.querySelector('.display').textContent += element.textContent;
         
         //update the number variables
@@ -101,3 +101,37 @@ document.querySelectorAll('.operator').forEach((element) => {
     
   });
 });
+
+//add event listener onto equal button
+document.querySelector('.evaluate').addEventListener('click', () => {
+  const results = Math.round(calculate()*100000000000000)/100000000000000;
+  
+  document.querySelector('.display').textContent=results;
+  num1='';
+  num2='';
+  operator='';
+  opFlag=false;
+});
+
+function calculate (){
+  const n1 = Number(num1);
+  const n2 = Number(num2);
+  const op = operator;
+
+  
+
+  if(op === '+'){
+    
+    return n1+n2;
+  }
+  else if (op === '-'){
+    return n1-n2;
+  }
+  else if (op === 'x'){
+    return n1*n2;
+  }
+  else if (op === '/'){
+    return n1/n2;
+  }
+  
+}
