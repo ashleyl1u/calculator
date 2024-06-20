@@ -98,6 +98,15 @@ document.querySelectorAll('.operator').forEach((element) => {
       document.querySelector('.display').textContent+= operator;
       opFlag=true;
     }
+    else{
+      const results = Math.round(calculate()*100000000000000)/100000000000000;
+  
+      document.querySelector('.display').textContent=results;
+      num1=results;
+      num2='';
+      operator = element.textContent;
+      document.querySelector('.display').textContent = num1+operator;
+    }
     
   });
 });
