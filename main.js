@@ -1,6 +1,7 @@
 let num1='';
 let num2='';
 let operator='';
+let lastAns='0';
 
 let opFlag= false;
 
@@ -9,8 +10,8 @@ let opFlag= false;
 document.querySelectorAll('.num').forEach((element) => {
   element.addEventListener('click', () => {
     let displayValue = document.querySelector('.display').textContent;
-    if(displayValue.length <16){
-      if(displayValue !== '0' && num1 !== ''){
+    if(displayValue.length <16 ){
+      if((displayValue !== '0' && num1 !== '' )|| element.textContent === '.'){
         document.querySelector('.display').textContent += element.textContent;
         
         //update the number variables
@@ -93,14 +94,19 @@ document.querySelector('.clear').addEventListener('click', () => {
 //add event listener on operator buttons 
 document.querySelectorAll('.operator').forEach((element) => {
   element.addEventListener('click', () => {
+
     if(opFlag === false){
+      if(num1===''){
+        num1=lastAns;
+      }
       operator = element.textContent;
       document.querySelector('.display').textContent+= operator;
       opFlag=true;
+      
     }
     else{
       const results = Math.round(calculate()*100000000000000)/100000000000000;
-  
+      lastAns= results;
       document.querySelector('.display').textContent=results;
       num1=results;
       num2='';
@@ -108,18 +114,23 @@ document.querySelectorAll('.operator').forEach((element) => {
       document.querySelector('.display').textContent = num1+operator;
     }
     
+    
   });
 });
 
 //add event listener onto equal button
 document.querySelector('.evaluate').addEventListener('click', () => {
-  const results = Math.round(calculate()*100000000000000)/100000000000000;
+
+  if(num1 !== '' && num2 !=='' && operator !== ''){
+    const results = Math.round(calculate()*100000000000000)/100000000000000;
+    lastAns= results;
+    document.querySelector('.display').textContent=results;
+    num1='';
+    num2='';
+    operator='';
+    opFlag=false;
+  }
   
-  document.querySelector('.display').textContent=results;
-  num1='';
-  num2='';
-  operator='';
-  opFlag=false;
 });
 
 function calculate (){
@@ -144,3 +155,4 @@ function calculate (){
   }
   
 }
+
