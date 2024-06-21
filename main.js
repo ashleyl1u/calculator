@@ -2,7 +2,6 @@ let num1='';
 let num2='';
 let operator='';
 let lastAns='0';
-
 let opFlag= false;
 
 
@@ -10,33 +9,60 @@ let opFlag= false;
 document.querySelectorAll('.num').forEach((element) => {
   element.addEventListener('click', () => {
     let displayValue = document.querySelector('.display').textContent;
-    if(displayValue.length <16 ){
-      if((displayValue !== '0' && num1 !== '' )|| element.textContent === '.'){
-        document.querySelector('.display').textContent += element.textContent;
-        
-        //update the number variables
-        if(opFlag == false){
-          num1 += element.textContent;
-        }
-        else{
-          num2 += element.textContent;
-        }
-        
-      }
-      else{
-        document.querySelector('.display').textContent = element.textContent;
-        num1 = element.textContent;
-      } 
-    }
+    let buttonValue = element.textContent;
+    displayNumber(displayValue, buttonValue);
     
   });
 });
+
+function displayNumber (displayValue, buttonValue) {
+  if(displayValue.length <16 ){
+    if( num1 !== '' ){ //|| element.textContent === '.'
+      document.querySelector('.display').textContent += buttonValue;
+      
+      //update the number variables
+      addToNumberVariables(buttonValue);
+      
+    }
+    else{
+      //display if num 1 doesn't have any value
+      document.querySelector('.display').textContent = buttonValue;
+      num1 = buttonValue;
+    } 
+  }
+}
+
+
+function addToNumberVariables(digit){
+  if(opFlag == false){
+    num1 += digit;
+  }
+  else{
+    num2 += digit;
+  }
+}
+
+function deleteFromNumberVariables(digit){
+  if(opFlag == false){
+    num1 = digit;
+  }
+  else{
+    num2 = num2.substring(0,num2.length-1);
+  }
+}
+
 
 
 
 document.querySelector('.delete').addEventListener('click', () => {
   let displayValue = document.querySelector('.display').textContent;
+  deleteDigit(displayValue);
   
+  
+});
+
+
+function deleteDigit(displayValue){
   //if only one digit and user deletes --> display 0
   if(displayValue.length === 1){
     document.querySelector('.display').textContent = 0;
@@ -50,22 +76,18 @@ document.querySelector('.delete').addEventListener('click', () => {
       operator='';
     }
 
-    //set display to new display value after last value has been deleted 
+    //get new displayvalue 
     displayValue = displayValue.substring(0,displayValue.length-1);
-    document.querySelector('.display').textContent = displayValue;
-  
-    //update the number variables
-    if(opFlag == false){
-      num1 = displayValue;
-    }
-    else{
-      num2 = num2.substring(0,num2.length-1);
-    }
 
-   
+    //display the new displayvalue
+    document.querySelector('.display').textContent = displayValue;
+
+    //update the number variables
+    deleteFromNumberVariables(displayValue);
+
+ 
   }
-  
-});
+}
 
 
 
@@ -82,12 +104,8 @@ function isOperator (c) {
 
 //add event listener for clear button
 document.querySelector('.clear').addEventListener('click', () => {
-  document.querySelector('.display').textContent =0;
-
-  num1='';
-  num2='';
-  operator='';
-  opFlag= false;
+  document.querySelector('.display').textContent ='0';
+  resetVariables ();
 });
 
 
@@ -95,64 +113,107 @@ document.querySelector('.clear').addEventListener('click', () => {
 document.querySelectorAll('.operator').forEach((element) => {
   element.addEventListener('click', () => {
 
-    if(opFlag === false){
-      if(num1===''){
-        num1=lastAns;
-      }
-      operator = element.textContent;
-      document.querySelector('.display').textContent+= operator;
-      opFlag=true;
-      
-    }
-    else{
-      const results = Math.round(calculate()*100000000000000)/100000000000000;
-      lastAns= results;
-      document.querySelector('.display').textContent=results;
-      num1=results;
-      num2='';
-      operator = element.textContent;
-      document.querySelector('.display').textContent = num1+operator;
-    }
-    
-    
+    operator = element.textContent;
+    displayOperator();
   });
 });
 
-//add event listener onto equal button
-document.querySelector('.evaluate').addEventListener('click', () => {
 
-  if(num1 !== '' && num2 !=='' && operator !== ''){
-    const results = Math.round(calculate()*100000000000000)/100000000000000;
+
+function displayOperator(){
+  if(opFlag === false){
+    //if num1 has no value then set num1 to the last answer
+    if(num1===''){
+      num1=lastAns;
+    }
+
+
+
+    //update the display to have the operator
+    document.querySelector('.display').textContent+= operator;
+
+    //set flag to true
+    opFlag=true;
+    
+    
+  }
+
+  //if a second operator is clicked when a first one hasnt been calculated yet 
+  else{
+
+    //calculate
+    const results = calculate();
+    
+
+    //update global variables
+    num1=results;
+    num2='';
     lastAns= results;
-    document.querySelector('.display').textContent=results;
+  
+    //display the results
+    document.querySelector('.display').textContent = num1+operator;
+  }
+}
+
+
+function resetVariables (){
     num1='';
     num2='';
     operator='';
     opFlag=false;
+    lastAns='0';
+}
+
+
+//add event listener onto equal button
+document.querySelector('.evaluate').addEventListener('click', () => {
+
+  //
+  if(num1 !== '' && num2 !=='' && operator !== ''){
+    //calculate results
+    const results = calculate();
+    
+    //display results 
+    document.querySelector('.display').textContent=results;
+
+    //reset variables
+    resetVariables();
+
+    //set last answer to the results
+    lastAns= results;
   }
   
 });
+
+
 
 function calculate (){
   const n1 = Number(num1);
   const n2 = Number(num2);
   const op = operator;
 
-  
+  let results ;
 
   if(op === '+'){
     
-    return n1+n2;
+    results =  n1+n2;
   }
   else if (op === '-'){
-    return n1-n2;
+    results = n1-n2;
   }
   else if (op === 'x'){
-    return n1*n2;
+    results = n1*n2;
   }
   else if (op === '/'){
-    return n1/n2;
+    results = n1/n2;
   }
+
+  results = Math.round(results*100000000000000)/100000000000000;
+  return results;
   
 }
+
+
+
+
 
