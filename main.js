@@ -16,8 +16,8 @@ document.querySelectorAll('.num').forEach((element) => {
 });
 
 function displayNumber (displayValue, buttonValue) {
-  if(displayValue.length <16 ){
-    if( num1 !== '' ){ //|| element.textContent === '.'
+  if(displayValue.length <11 ){
+    if( num1 !== '' ){ 
       document.querySelector('.display').textContent += buttonValue;
       
       //update the number variables
@@ -66,6 +66,7 @@ function deleteDigit(displayValue){
   //if only one digit and user deletes --> display 0
   if(displayValue.length === 1){
     document.querySelector('.display').textContent = 0;
+    num1='';
   }
 
 
@@ -208,7 +209,7 @@ function calculate (){
     results = n1/n2;
   }
 
-  results = Math.round(results*100000000000000)/100000000000000;
+  results = Math.round(results*1000000000)/1000000000;
   return results;
   
 }
@@ -224,7 +225,7 @@ function displayPoint (){
 
   const displayValue = document.querySelector('.display').textContent;
   let numberValue ;
-  if (displayValue.length < 16){
+  if (displayValue.length < 11){
 
     if(opFlag === true){
       numberValue = num2;
