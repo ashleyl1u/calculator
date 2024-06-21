@@ -215,5 +215,44 @@ function calculate (){
 
 
 
+document.querySelector('.point').addEventListener('click', () => {
+  displayPoint();
+});
+
+
+function displayPoint (){
+
+  const displayValue = document.querySelector('.display').textContent;
+  let numberValue ;
+  if (displayValue.length < 16){
+
+    if(opFlag === true){
+      numberValue = num2;
+    }
+    else{
+      numberValue = num1;
+    }
+
+    if(numberValue.length === 0){
+      if(num1 === ''){
+        document.querySelector('.display').textContent = '0.';
+      }
+      else{
+        document.querySelector('.display').textContent += '0.';
+      }
+      
+      addToNumberVariables('0.');
+      
+    }
+    
+    else if(numberValue.includes('.') === false){
+      document.querySelector('.display').textContent += '.';
+      addToNumberVariables('.');
+    }
+
+ 
+  }
+}
+
 
 
